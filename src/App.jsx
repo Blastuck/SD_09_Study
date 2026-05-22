@@ -203,7 +203,7 @@ export default function App() {
     } else goList();
   };
 
-  const layoutProps={categories,tags,filterCat,filterTag,filterMember,setFilterCat,setFilterTag,setFilterMember,searchOpen,setSearchOpen,search,setSearch,fetchAll};
+  const layoutProps={categories,tags,filterCat,filterTag,filterMember,setFilterCat,setFilterTag,setFilterMember,searchOpen,setSearchOpen,search,setSearch,fetchAll,goList};
 
   if(view==="detail"&&selected){
     const subPages=articles.filter(a=>a.parent_id===selected.id);
@@ -290,7 +290,7 @@ export default function App() {
 }
 
 // ── 레이아웃 + 사이드바 ───────────────────────────────────
-function Layout({children,categories,tags,filterCat,filterTag,filterMember,setFilterCat,setFilterTag,setFilterMember,searchOpen,setSearchOpen,search,setSearch,fetchAll,onNew}){
+function Layout({children,categories,tags,filterCat,filterTag,filterMember,setFilterCat,setFilterTag,setFilterMember,searchOpen,setSearchOpen,search,setSearch,fetchAll,goList,onNew}){
   const mobile=useMobile();
   const [sidebarOpen,setSidebarOpen]=useState(false);
   const [catOpen,setCatOpen]=useState(true);
@@ -353,7 +353,7 @@ function Layout({children,categories,tags,filterCat,filterTag,filterMember,setFi
           <SideIcon>✏️</SideIcon>새 페이지
         </NavBtn>
         <div style={{height:1,background:N.border,margin:"8px 2px"}}/>
-        <NavBtn onClick={()=>{setFilterCat(null);setFilterTag(null);setFilterMember(null);if(mobile)setSidebarOpen(false);}} active={!filterCat&&!filterTag&&!filterMember}>
+        <NavBtn onClick={()=>{setFilterCat(null);setFilterTag(null);setFilterMember(null);goList();if(mobile)setSidebarOpen(false);}} active={!filterCat&&!filterTag&&!filterMember}>
           <SideIcon>🏠</SideIcon><span style={{fontSize:13}}>모든 페이지</span>
         </NavBtn>
       </div>
@@ -361,7 +361,7 @@ function Layout({children,categories,tags,filterCat,filterTag,filterMember,setFi
       <SideSection label="카테고리" open={catOpen} setOpen={setCatOpen} onAdd={()=>setAddingCat(true)}>
         {categories.map(c=>(
           <NavBtnDel key={c.id} active={filterCat===c.id}
-            onClick={()=>{setFilterCat(c.id);setFilterTag(null);setFilterMember(null);if(mobile)setSidebarOpen(false);}}
+            onClick={()=>{setFilterCat(c.id);setFilterTag(null);setFilterMember(null);goList();if(mobile)setSidebarOpen(false);}}
             onDel={e=>delCategory(c.id,e)}>
             <SideIcon>📁</SideIcon><span style={{fontSize:13,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c.name}</span>
           </NavBtnDel>
@@ -379,7 +379,7 @@ function Layout({children,categories,tags,filterCat,filterTag,filterMember,setFi
       <SideSection label="태그" open={tagOpen} setOpen={setTagOpen} onAdd={()=>setAddingTag(true)}>
         {tags.map(t=>(
           <NavBtnDel key={t.id} active={filterTag===t.id}
-            onClick={()=>{setFilterTag(t.id);setFilterCat(null);setFilterMember(null);if(mobile)setSidebarOpen(false);}}
+            onClick={()=>{setFilterTag(t.id);setFilterCat(null);setFilterMember(null);goList();if(mobile)setSidebarOpen(false);}}
             onDel={e=>delTag(t.id,e)}>
             <SideIcon style={{fontSize:12}}>#</SideIcon><span style={{fontSize:13,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.name}</span>
           </NavBtnDel>
@@ -397,7 +397,7 @@ function Layout({children,categories,tags,filterCat,filterTag,filterMember,setFi
       <SideSection label="팀원" open={memberOpen} setOpen={setMemberOpen}>
         {MEMBERS.map(m=>(
           <NavBtn key={m} active={filterMember===m}
-            onClick={()=>{setFilterMember(filterMember===m?null:m);setFilterCat(null);setFilterTag(null);if(mobile)setSidebarOpen(false);}}>
+            onClick={()=>{setFilterMember(filterMember===m?null:m);setFilterCat(null);setFilterTag(null);goList();if(mobile)setSidebarOpen(false);}}>
             <div style={{width:22,height:22,borderRadius:"50%",background:memberColor(m),display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:600,color:"#fff",flexShrink:0}}>{m[0]}</div>
             <span style={{fontSize:13}}>{m}</span>
           </NavBtn>
